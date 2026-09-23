@@ -1,0 +1,71 @@
+# ============================================
+# Gradle
+# ============================================
+.gradle/
+build/
+captures/
+.externalNativeBuild/
+.cxx/
+.kotlin/
+
+# ============================================
+# Archivos generados / compilados
+# ============================================
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+output-metadata.json
+release/
+debug/
+
+# ============================================
+# Configuración local y secretos
+# (ruta del SDK, API keys, credenciales)
+# ============================================
+local.properties
+secrets.properties
+keystore.properties
+*.env
+
+# ============================================
+# Firmas de la app (NUNCA subir)
+# ============================================
+*.jks
+*.keystore
+
+# ============================================
+# Google Services / Firebase
+# ============================================
+google-services.json
+
+# ============================================
+# Android Studio / IntelliJ
+# ============================================
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+.navigation/
+
+# Si más adelante querés compartir el estilo de código
+# del proyecto, descomentá estas líneas:
+# !.idea/codeStyles/
+# !.idea/codeStyles/**
+
+# ============================================
+# Logs y temporales
+# ============================================
+*.log
+*.tmp
+*.swp
+hs_err_pid*
+
+# ============================================
+# Sistema operativo
+# ============================================
+.DS_Store
+Thumbs.db
+desktop.ini
