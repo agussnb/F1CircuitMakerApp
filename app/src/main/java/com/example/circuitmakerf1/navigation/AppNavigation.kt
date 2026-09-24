@@ -12,9 +12,11 @@ import com.example.circuitmakerf1.ui.HomeScreen
 import com.example.circuitmakerf1.ui.DetailsScreen
 import com.example.circuitmakerf1.ui.RecordingCircuitScreen
 import kotlinx.coroutines.launch
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 
 val home = "home"
-val details = "details/{circuitName}"
+const val details = "details/{circuitId}"
 
 const val record = "record"
 
@@ -28,19 +30,25 @@ fun AppNavigation(repository: CircuitRepository, gpsManager: GPSManager){
                 onCircuitClick = {name -> miController.navigate("details/$name")},
                 onRecordClick = {miController.navigate(record)})
         }
-        composable(details){backStackEntry ->
-            val circuitName = backStackEntry.arguments?.getString("circuitName")
+        composable(
+            route = details,
+            arguments = listOf(navArgument("circuitId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val circuitId = backStackEntry.arguments?.getInt("circuitId") ?: return@composable
             DetailsScreen(
-                repository=repository,
-                circuit = circuitName,
-                onBack = {miController.popBackStack()},
-                onErase = {scope.launch {
-                    val circuitoABorrar = repository.getCircuitByName(circuitName!!)
-                    if (circuitoABorrar != null) {
-                        repository.deleteCircuit(circuitoABorrar)
-                        miController.popBackStack()
+                repository = repository,
+                circuitId = circuitId,
+                onBack = { miController.popBackStack() },
+                onErase = {
+                    scope.launch {
+                        val circuito = repository.getCircuitById(circuitId)
+                        if (circuito != null) {
+                            repository.deleteCircuit(circuito)
+                            miController.popBackStack()
+                        }
                     }
-                }})
+                }
+            )
         }
         composable(record){
             RecordingCircuitScreen(gpsManager = gpsManager,

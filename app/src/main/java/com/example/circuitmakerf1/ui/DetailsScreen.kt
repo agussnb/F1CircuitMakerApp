@@ -15,10 +15,10 @@ import com.example.circuitmakerf1.data.CircuitRepository
 import com.example.circuitmakerf1.model.Circuit
 
 @Composable
-fun DetailsScreen(repository : CircuitRepository,circuit : String?,
+fun DetailsScreen(repository : CircuitRepository,circuitId : Int,
                   onBack : () -> Unit, onErase : () -> Unit){
-    val circuito by produceState<Circuit?>(initialValue = null, key1 = circuit){
-        value = if (circuit !=null) repository.getCircuitByName(circuit) else null
+    val circuito by produceState<Circuit?>(initialValue = null, key1 = circuitId) {
+        value = repository.getCircuitById(circuitId)
     }
     Column{
         AddButton(onClick = onBack, label = "Volver", modifier = Modifier.padding(top = 20.dp))

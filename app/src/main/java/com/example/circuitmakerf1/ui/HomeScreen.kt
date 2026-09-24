@@ -21,8 +21,7 @@ import androidx.compose.runtime.getValue
 import kotlinx.coroutines.launch
 
 @Composable
-fun HomeScreen(repository : CircuitRepository, onCircuitClick : (String)-> Unit, onRecordClick : () -> Unit){
-    //val listaCircuitos : mutableStateListOf<Circuit> = CircuitRepository.getCircuits();
+fun HomeScreen(repository : CircuitRepository, onCircuitClick : (Int)-> Unit, onRecordClick : () -> Unit){
     val listaCircuitos by repository.allCircuits.collectAsState(initial = emptyList())
     val scrollState = rememberScrollState()
 
@@ -39,7 +38,7 @@ fun HomeScreen(repository : CircuitRepository, onCircuitClick : (String)-> Unit,
         Column(modifier = Modifier.verticalScroll(scrollState)){
             listaCircuitos.forEach { circuit ->
                 CircuitItem(circuit = circuit,
-                    modifier = Modifier.clickable { onCircuitClick(circuit.name) }.padding(top = 10.dp))
+                    modifier = Modifier.clickable { onCircuitClick(circuit.id) }.padding(top = 10.dp))
 
             }
         }

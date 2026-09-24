@@ -16,10 +16,6 @@ interface CircuitDao {
     @Query(value = "SELECT * FROM circuit WHERE id = :id")
     suspend fun getById(id: Int): Circuit?
 
-    @Query(value = "SELECT * FROM circuit WHERE name = :name")
-    suspend fun getByName(name: String): Circuit?
-
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(circuit: Circuit)
 
