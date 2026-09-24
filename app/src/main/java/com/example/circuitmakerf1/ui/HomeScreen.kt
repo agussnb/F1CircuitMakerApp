@@ -24,19 +24,9 @@ import kotlinx.coroutines.launch
 fun HomeScreen(repository : CircuitRepository, onCircuitClick : (String)-> Unit, onRecordClick : () -> Unit){
     //val listaCircuitos : mutableStateListOf<Circuit> = CircuitRepository.getCircuits();
     val listaCircuitos by repository.allCircuits.collectAsState(initial = emptyList())
-    val scope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
 
     Column(modifier = Modifier.fillMaxSize()){ //Columna mostrando circuitos
-        Spacer(modifier = Modifier.height(24.dp))
-        AddButton(onClick = { //Boton para agregar un circuito hardcodeado
-            scope.launch {
-                repository.insertsCircuit(
-                    Circuit(name = "Spa-Francorchamps", country = "Belgium", lengthKm =  7.004, laps = 44)
-                )
-            }
-        },
-            modifier = Modifier.fillMaxWidth())
 
         Spacer(modifier = Modifier.height(8.dp))
 
