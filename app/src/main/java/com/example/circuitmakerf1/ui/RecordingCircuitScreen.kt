@@ -120,16 +120,17 @@ fun RecordingCircuitScreen(gpsManager: GPSManager, repository: CircuitRepository
                                 name = nombreCircuito,
                                 country = paisCircuito,
                                 lengthKm = kilometros,
-                                laps = vueltas.toInt()
+                                laps = vueltas
                             )
                         )
                         gpsManager.distanciaTotal = 0.0
                         nombreCircuito = ""
+                        paisCircuito = ""
                     }
-
                 },
                 label = "Guardar en Base de Datos",
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                enabled = nombreCircuito.isNotBlank()
             )
         }
     }

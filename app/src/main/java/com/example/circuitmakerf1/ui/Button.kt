@@ -9,12 +9,10 @@ import androidx.compose.ui.Modifier
 fun AddButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    label: String = "Añadir circuito"
+    label: String = "Añadir circuito",
+    enabled: Boolean = true
 ) {
-    Button(
-        onClick = onClick,
-        modifier = modifier
-    ) {
+    Button(onClick = onClick, modifier = modifier, enabled = enabled) {
         Text(text = label)
     }
 }
