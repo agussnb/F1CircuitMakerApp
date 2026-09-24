@@ -12,6 +12,7 @@ navigationCompose = "2.8.5"
 room = "2.7.0"
 ksp = "2.0.21-1.0.27"
 playServicesLocation = "21.3.0"
+remoteCreationCompose = "1.0.0-alpha19"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -33,6 +34,7 @@ androidx-room-runtime = { group = "androidx.room", name = "room-runtime", versio
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
+androidx-compose-remote-creation-compose = { group = "androidx.compose.remote", name = "remote-creation-compose", version.ref = "remoteCreationCompose" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

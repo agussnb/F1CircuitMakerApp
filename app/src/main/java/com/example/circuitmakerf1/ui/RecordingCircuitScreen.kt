@@ -25,10 +25,7 @@ import com.example.circuitmakerf1.gps.GPSManager
 import com.example.circuitmakerf1.model.Circuit
 import kotlinx.coroutines.launch
 import android.Manifest
-
-
-
-
+import androidx.compose.remote.creation.compose.state.floor
 
 
 @Composable
@@ -38,7 +35,7 @@ fun RecordingCircuitScreen(gpsManager: GPSManager, repository: CircuitRepository
     val scope = rememberCoroutineScope()
     val kilometros = gpsManager.distanciaTotal/1000
     val textoDistancia = "%.2f".format(kilometros)
-    val vueltas = gpsManager.distanciaTotal / 305.0
+    val vueltas = if (kilometros > 0) floor(305.0 / kilometros).toInt() + 1 else 0
     val scrollState = rememberScrollState()
     val context = LocalContext.current
     val permissionLauncher = rememberLauncherForActivityResult(
