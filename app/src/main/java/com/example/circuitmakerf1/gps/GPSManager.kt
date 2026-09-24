@@ -14,11 +14,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat.checkSelfPermission
 import com.google.android.gms.location.Priority
+import android.content.pm.PackageManager
 
 
 public class GPSManager(private val context: Context) {
     val locationClient: FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
-
+    var avisoPermiso by remember { mutableStateOf(false) }
     private val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000L)
         .setWaitForAccurateLocation(true).build()
 
@@ -46,11 +47,8 @@ public class GPSManager(private val context: Context) {
     var distanciaTotal by mutableDoubleStateOf(0.0)
     fun startLocationUpdates() {
         val fineLocation = android.Manifest.permission.ACCESS_FINE_LOCATION
-        val coarseLocation = android.Manifest.permission.ACCESS_COARSE_LOCATION
 
-        if (checkSelfPermission(context, fineLocation) == android.content.pm.PackageManager.PERMISSION_GRANTED ||
-            checkSelfPermission(context, coarseLocation) == android.content.pm.PackageManager.PERMISSION_GRANTED
-        ) {
+        if (checkSelfPermission(context, fineLocation) == PackageManager.PERMISSION_GRANTED) {
             locationClient.requestLocationUpdates(
                 locationRequest,
                 locationCallback,

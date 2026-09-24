@@ -25,26 +25,31 @@ import com.example.circuitmakerf1.gps.GPSManager
 import com.example.circuitmakerf1.model.Circuit
 import kotlinx.coroutines.launch
 import android.Manifest
-import androidx.compose.remote.creation.compose.state.floor
+import kotlin.math.floor
 
 
 @Composable
 fun RecordingCircuitScreen(gpsManager: GPSManager, repository: CircuitRepository, onBack: () -> Unit) {
-    var nombreCircuito by remember {mutableStateOf("")}
-    var paisCircuito by remember {mutableStateOf("")}
+    var nombreCircuito by remember { mutableStateOf("") }
+    var paisCircuito by remember { mutableStateOf("") }
+    var avisoPermiso by remember { mutableStateOf(false) }   // 🆕 estado del aviso
     val scope = rememberCoroutineScope()
-    val kilometros = gpsManager.distanciaTotal/1000
+    val kilometros = gpsManager.distanciaTotal / 1000
     val textoDistancia = "%.2f".format(kilometros)
     val vueltas = if (kilometros > 0) floor(305.0 / kilometros).toInt() + 1 else 0
     val scrollState = rememberScrollState()
     val context = LocalContext.current
+
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
-    ){permissions ->
-        val concedidos = permissions.values.all {it}
-        if (concedidos){
+    ) { permissions ->
+        val fineConcedido = permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true
+        if (fineConcedido) {
+            avisoPermiso = false
             gpsManager.startLocationUpdates()
             gpsManager.startRecording()
+        } else {
+            avisoPermiso = true
         }
     }
 
@@ -56,14 +61,14 @@ fun RecordingCircuitScreen(gpsManager: GPSManager, repository: CircuitRepository
                     gpsManager.stopRecording()
                     gpsManager.stopLocationUpdates()
                 } else {
-                    val finePermission = ContextCompat.checkSelfPermission(context,
-                        Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                    val coarsePermission = ContextCompat.checkSelfPermission(context,
-                        Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                    if (!finePermission || !coarsePermission){
+                    val tieneFine = ContextCompat.checkSelfPermission(
+                        context, Manifest.permission.ACCESS_FINE_LOCATION
+                    ) == PackageManager.PERMISSION_GRANTED
+
+                    if (tieneFine) {
                         gpsManager.startLocationUpdates()
                         gpsManager.startRecording()
-                    }else{
+                    } else {
                         permissionLauncher.launch(
                             arrayOf(
                                 Manifest.permission.ACCESS_FINE_LOCATION,
@@ -78,6 +83,12 @@ fun RecordingCircuitScreen(gpsManager: GPSManager, repository: CircuitRepository
                 .fillMaxWidth(),
             label = if (gpsManager.isRecording) "Detener grabación" else "Iniciar grabación"
         )
+        if (avisoPermiso) {
+            Text(
+                "Necesitás habilitar la ubicación precisa para grabar un circuito",
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        }
 
         Text("Distancia recorrida: $textoDistancia km")
 
