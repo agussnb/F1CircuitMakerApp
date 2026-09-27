@@ -16,38 +16,48 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.agussnb.circuitmakerf1.domain.model.Track
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.agussnb.circuitmakerf1.domain.port.TrackRepository
 import com.agussnb.circuitmakerf1.ui.components.AddButton
+import com.agussnb.circuitmakerf1.ui.components.toDisplayText
 
 @Composable
-fun HomeScreen(repository : TrackRepository, onTrackClick : (Int)-> Unit, onRecordClick : () -> Unit){
-    val tracks by repository.allTracks.collectAsState(initial = emptyList())
+fun HomeScreen(
+    onTrackClick: (Int) -> Unit,
+    onRecordClick: () -> Unit,
+    viewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory)
+) {
+    val uiState by viewModel.uiState.collectAsState()
     val scrollState = rememberScrollState()
 
-    Column(modifier = Modifier.fillMaxSize()){ //Columna mostrando circuitos
-
+    Column(modifier = Modifier.fillMaxSize()) {
         Spacer(modifier = Modifier.height(8.dp))
 
         AddButton(
-            onClick = onRecordClick, //Boton para ir a la pantalla de grabacion
+            onClick = onRecordClick,
             modifier = Modifier.fillMaxWidth(),
-            label = "Pantalla de grabacion"
+            label = "Pantalla de grabación"
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        Column(modifier = Modifier.verticalScroll(scrollState)){
-            tracks.forEach { track  ->
-                TrackItem(track = track ,
-                    modifier = Modifier.clickable { onTrackClick(track .id) }.padding(top = 10.dp))
-
+        Column(modifier = Modifier.verticalScroll(scrollState)) {
+            uiState.tracks.forEach { track ->
+                TrackItem(
+                    track = track,
+                    modifier = Modifier
+                        .clickable { onTrackClick(track.id) }
+                        .padding(top = 10.dp)
+                )
             }
         }
     }
 }
 
 @Composable
-fun TrackItem(track: Track, modifier: Modifier = Modifier){
-    Text(text = "$track",
-        modifier = modifier.padding(top=15.dp))
+fun TrackItem(track: Track, modifier: Modifier = Modifier) {
+    Text(
+        text = track.toDisplayText(),
+        modifier = modifier.padding(top = 15.dp)
+    )
 }

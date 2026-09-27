@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.agussnb.circuitmakerf1.domain.port.TrackRepository
+import com.agussnb.circuitmakerf1.domain.service.TrackRecorder
 
 const val home = "home"
 const val details = "details/{trackId}"
@@ -20,7 +21,7 @@ const val details = "details/{trackId}"
 const val record = "record"
 
 @Composable
-fun AppNavigation(repository: TrackRepository, gpsManager: GPSManager){
+fun AppNavigation(repository: TrackRepository, trackRecorder: TrackRecorder){
     val controller = rememberNavController()
     val scope = rememberCoroutineScope()
     NavHost(navController = controller, startDestination = home){
@@ -50,7 +51,7 @@ fun AppNavigation(repository: TrackRepository, gpsManager: GPSManager){
             )
         }
         composable(record){
-            RecordingCircuitScreen(gpsManager = gpsManager,
+            RecordingCircuitScreen(trackRecorder = trackRecorder,
                 repository = repository,
                 onBack={controller.popBackStack()})
         }
