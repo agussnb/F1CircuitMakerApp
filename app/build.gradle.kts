@@ -53,7 +53,6 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     implementation(libs.play.services.location)
-    implementation(libs.androidx.compose.remote.creation.compose)
     ksp(libs.androidx.room.compiler)
 
     testImplementation(libs.junit)
