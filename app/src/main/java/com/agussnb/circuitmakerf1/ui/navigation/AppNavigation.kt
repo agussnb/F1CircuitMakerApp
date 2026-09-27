@@ -17,44 +17,27 @@ import com.agussnb.circuitmakerf1.domain.service.TrackRecorder
 
 const val home = "home"
 const val details = "details/{trackId}"
-
 const val record = "record"
 
 @Composable
-fun AppNavigation(repository: TrackRepository, trackRecorder: TrackRecorder){
-    val controller = rememberNavController()
-    val scope = rememberCoroutineScope()
-    NavHost(navController = controller, startDestination = home){
-        composable(home){
-            HomeScreen(repository = repository,
-                onTrackClick = {name -> controller.navigate("details/$name")},
-                onRecordClick = {controller.navigate(record)})
+fun AppNavigation() {
+    val navController = rememberNavController()
+
+    NavHost(navController = navController, startDestination = home) {
+        composable(home) {
+            HomeScreen(
+                onTrackClick = { id -> navController.navigate("details/$id") },
+                onRecordClick = { navController.navigate(record) }
+            )
         }
         composable(
             route = details,
             arguments = listOf(navArgument("trackId") { type = NavType.IntType })
-        ) { backStackEntry ->
-            val trackId = backStackEntry.arguments?.getInt("trackId") ?: return@composable
-            DetailsScreen(
-                repository = repository,
-                trackId = trackId,
-                onBack = { controller.popBackStack() },
-                onErase = {
-                    scope.launch {
-                        val track = repository.getTrackById(trackId)
-                        if (track != null) {
-                            repository.deleteTrack(track)
-                            controller.popBackStack()
-                        }
-                    }
-                }
-            )
+        ) {
+            DetailsScreen(onBack = { navController.popBackStack() })
         }
-        composable(record){
-            RecordingCircuitScreen(trackRecorder = trackRecorder,
-                repository = repository,
-                onBack={controller.popBackStack()})
+        composable(record) {
+            RecordingCircuitScreen(onBack = { navController.popBackStack() })
         }
-
     }
 }

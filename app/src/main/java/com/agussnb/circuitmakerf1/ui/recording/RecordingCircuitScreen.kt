@@ -14,34 +14,20 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import com.agussnb.circuitmakerf1.domain.model.Track
-import com.agussnb.circuitmakerf1.domain.port.TrackRepository
-import com.agussnb.circuitmakerf1.domain.service.TrackRecorder
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.agussnb.circuitmakerf1.ui.components.AddButton
-import kotlinx.coroutines.launch
+
 
 @Composable
 fun RecordingCircuitScreen(
-    trackRecorder: TrackRecorder,
-    repository: TrackRepository,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    viewModel: RecordingViewModel = viewModel(factory = RecordingViewModel.Factory)
 ) {
-    val recordingState by trackRecorder.state.collectAsState()
-    var trackName by remember { mutableStateOf("") }
-    var trackCountry by remember { mutableStateOf("") }
-    var permitWarn by remember { mutableStateOf(false) }
-    val scope = rememberCoroutineScope()
-    val kilometers: Double = recordingState.totalDistanceMeters / 1000
-    val distanceText = "%.2f".format(kilometers)
-    val laps = if (kilometers > 0) (305.0 / kilometers).toInt() + 1 else 0
+    val uiState by viewModel.uiState.collectAsState()
     val scrollState = rememberScrollState()
     val context = LocalContext.current
 
@@ -50,10 +36,9 @@ fun RecordingCircuitScreen(
     ) { permissions ->
         val fineGranted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true
         if (fineGranted) {
-            permitWarn = false
-            trackRecorder.start()
+            viewModel.startRecording()
         } else {
-            permitWarn = true
+            viewModel.onPermissionDenied()
         }
     }
 
@@ -62,15 +47,15 @@ fun RecordingCircuitScreen(
 
         AddButton(
             onClick = {
-                if (recordingState.isRecording) {
-                    trackRecorder.stop()
+                if (uiState.isRecording) {
+                    viewModel.stopRecording()
                 } else {
                     val hasFinePermission = ContextCompat.checkSelfPermission(
                         context, Manifest.permission.ACCESS_FINE_LOCATION
                     ) == PackageManager.PERMISSION_GRANTED
 
                     if (hasFinePermission) {
-                        trackRecorder.start()
+                        viewModel.startRecording()
                     } else {
                         permissionLauncher.launch(
                             arrayOf(
@@ -84,32 +69,32 @@ fun RecordingCircuitScreen(
             modifier = Modifier
                 .padding(top = 40.dp)
                 .fillMaxWidth(),
-            label = if (recordingState.isRecording) "Detener grabación" else "Iniciar grabación"
+            label = if (uiState.isRecording) "Detener grabación" else "Iniciar grabación"
         )
 
-        if (permitWarn) {
+        if (viewModel.showPermissionWarning) {
             Text(
                 "Necesitás habilitar la ubicación precisa para grabar un circuito",
                 modifier = Modifier.padding(top = 8.dp)
             )
         }
 
-        Text("Distancia recorrida: $distanceText km")
+        Text("Distancia recorrida: ${"%.2f".format(uiState.distanceKm)} km")
 
-        if (!recordingState.isRecording && kilometers > 0.005) {
+        if (uiState.hasFinishedRecording) {
             Text("¡Circuito completado!", modifier = Modifier.padding(top = 16.dp))
 
             TextField(
-                value = trackName,
-                onValueChange = { trackName = it },
+                value = viewModel.trackName,
+                onValueChange = viewModel::onTrackNameChange,
                 label = { Text("Dale un nombre a tu circuito") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp)
             )
             TextField(
-                value = trackCountry,
-                onValueChange = { trackCountry = it },
+                value = viewModel.trackCountry,
+                onValueChange = viewModel::onTrackCountryChange,
                 label = { Text("País de tu circuito") },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -117,24 +102,10 @@ fun RecordingCircuitScreen(
             )
 
             AddButton(
-                onClick = {
-                    scope.launch {
-                        repository.insertTrack(
-                            Track(
-                                name = trackName,
-                                country = trackCountry,
-                                lengthKm = kilometers,
-                                laps = laps
-                            )
-                        )
-                        trackRecorder.reset()
-                        trackName = ""
-                        trackCountry = ""
-                    }
-                },
+                onClick = viewModel::saveTrack,
                 label = "Guardar en Base de Datos",
                 modifier = Modifier.fillMaxWidth(),
-                enabled = trackName.isNotBlank()
+                enabled = viewModel.trackName.isNotBlank()
             )
         }
     }

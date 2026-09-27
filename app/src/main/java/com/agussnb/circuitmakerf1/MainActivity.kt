@@ -12,14 +12,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val container = (application as CircuitMakerApp).container
-
         setContent {
             CircuitMakerF1Theme {
-                AppNavigation(
-                    repository = container.trackRepository,
-                    gpsManager = container.gpsManager
-                )
+                AppNavigation()
             }
         }
     }
