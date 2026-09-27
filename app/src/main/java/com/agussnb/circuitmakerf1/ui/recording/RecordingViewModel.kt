@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.agussnb.circuitmakerf1.TrackMakerApp
+import com.agussnb.circuitmakerf1.domain.model.GpsPoint
 import com.agussnb.circuitmakerf1.domain.model.Track
 import com.agussnb.circuitmakerf1.domain.port.TrackRepository
 import com.agussnb.circuitmakerf1.domain.service.TrackRecorder
@@ -22,7 +23,8 @@ import kotlinx.coroutines.launch
 data class RecordingUiState(
     val isRecording: Boolean = false,
     val distanceKm: Double = 0.0,
-    val laps: Int = 0
+    val laps: Int = 0,
+    val points: List<GpsPoint> = emptyList()
 ) {
     val hasFinishedRecording: Boolean
         get() = !isRecording && distanceKm > 0.005
@@ -39,7 +41,8 @@ class RecordingViewModel(
             RecordingUiState(
                 isRecording = recording.isRecording,
                 distanceKm = km,
-                laps = fiaLapCount(km)
+                laps = fiaLapCount(km),
+                points = recording.points
             )
         }
         .stateIn(

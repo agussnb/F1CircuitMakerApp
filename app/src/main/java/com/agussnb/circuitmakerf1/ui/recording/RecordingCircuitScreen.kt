@@ -6,6 +6,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -20,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.agussnb.circuitmakerf1.ui.components.AddButton
+import com.agussnb.circuitmakerf1.ui.components.TrackMap
 
 
 @Composable
@@ -70,6 +72,14 @@ fun RecordingCircuitScreen(
                 .padding(top = 40.dp)
                 .fillMaxWidth(),
             label = if (uiState.isRecording) "Detener grabación" else "Iniciar grabación"
+        )
+
+        TrackMap(
+            points = uiState.points,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(300.dp)
+                .padding(vertical = 8.dp)
         )
 
         if (viewModel.showPermissionWarning) {
