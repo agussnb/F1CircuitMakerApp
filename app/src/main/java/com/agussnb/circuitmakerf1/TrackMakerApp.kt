@@ -3,7 +3,7 @@ package com.agussnb.circuitmakerf1
 import android.app.Application
 import com.agussnb.circuitmakerf1.di.AppContainer
 
-class CircuitMakerApp : Application() {
+class TrackMakerApp : Application() {
 
     lateinit var container: AppContainer
         private set

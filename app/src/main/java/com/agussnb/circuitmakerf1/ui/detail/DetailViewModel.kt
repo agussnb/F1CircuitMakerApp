@@ -7,7 +7,7 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.agussnb.circuitmakerf1.CircuitMakerApp
+import com.agussnb.circuitmakerf1.TrackMakerApp
 import com.agussnb.circuitmakerf1.domain.model.Track
 import com.agussnb.circuitmakerf1.domain.port.TrackRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -53,7 +53,7 @@ class DetailViewModel(
     companion object {
         val Factory = viewModelFactory {
             initializer {
-                val app = this[APPLICATION_KEY] as CircuitMakerApp
+                val app = this[APPLICATION_KEY] as TrackMakerApp
                 DetailViewModel(
                     savedStateHandle = createSavedStateHandle(),
                     repository = app.container.trackRepository

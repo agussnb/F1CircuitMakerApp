@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.agussnb.circuitmakerf1.CircuitMakerApp
+import com.agussnb.circuitmakerf1.TrackMakerApp
 import com.agussnb.circuitmakerf1.domain.model.Track
 import com.agussnb.circuitmakerf1.domain.port.TrackRepository
 import com.agussnb.circuitmakerf1.domain.service.TrackRecorder
@@ -100,7 +100,7 @@ class RecordingViewModel(
     companion object {
         val Factory = viewModelFactory {
             initializer {
-                val app = this[APPLICATION_KEY] as CircuitMakerApp
+                val app = this[APPLICATION_KEY] as TrackMakerApp
                 RecordingViewModel(
                     trackRecorder = app.container.trackRecorder,
                     repository = app.container.trackRepository
