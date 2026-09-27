@@ -1,4 +1,4 @@
-package com.agussnb.circuitmakerf1.ui
+package com.agussnb.circuitmakerf1.ui.home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -14,29 +14,32 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.agussnb.circuitmakerf1.data.CircuitRepository
-import com.agussnb.circuitmakerf1.model.Circuit
+import com.agussnb.circuitmakerf1.domain.model.Track
 import androidx.compose.runtime.getValue
+import com.agussnb.circuitmakerf1.domain.port.TrackRepository
+import com.agussnb.circuitmakerf1.ui.components.AddButton
 
 @Composable
-fun HomeScreen(repository : CircuitRepository, onCircuitClick : (Int)-> Unit, onRecordClick : () -> Unit){
-    val listaCircuitos by repository.allCircuits.collectAsState(initial = emptyList())
+fun HomeScreen(repository : TrackRepository, onTrackClick : (Int)-> Unit, onRecordClick : () -> Unit){
+    val tracks by repository.allTracks.collectAsState(initial = emptyList())
     val scrollState = rememberScrollState()
 
     Column(modifier = Modifier.fillMaxSize()){ //Columna mostrando circuitos
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        AddButton(onClick = onRecordClick, //Boton para ir a la pantalla de grabacion
+        AddButton(
+            onClick = onRecordClick, //Boton para ir a la pantalla de grabacion
             modifier = Modifier.fillMaxWidth(),
-            label = "Pantalla de grabacion")
+            label = "Pantalla de grabacion"
+        )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         Column(modifier = Modifier.verticalScroll(scrollState)){
-            listaCircuitos.forEach { circuit ->
-                CircuitItem(circuit = circuit,
-                    modifier = Modifier.clickable { onCircuitClick(circuit.id) }.padding(top = 10.dp))
+            tracks.forEach { track  ->
+                TrackItem(track = track ,
+                    modifier = Modifier.clickable { onTrackClick(track .id) }.padding(top = 10.dp))
 
             }
         }
@@ -44,7 +47,7 @@ fun HomeScreen(repository : CircuitRepository, onCircuitClick : (Int)-> Unit, on
 }
 
 @Composable
-fun CircuitItem(circuit: Circuit, modifier: Modifier = Modifier){
-    Text(text = "$circuit",
+fun TrackItem(track: Track, modifier: Modifier = Modifier){
+    Text(text = "$track",
         modifier = modifier.padding(top=15.dp))
 }

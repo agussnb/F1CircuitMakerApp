@@ -1,4 +1,4 @@
-package com.agussnb.circuitmakerf1.ui
+package com.agussnb.circuitmakerf1.ui.recording
 
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -20,23 +20,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import com.agussnb.circuitmakerf1.data.CircuitRepository
-import com.agussnb.circuitmakerf1.gps.GPSManager
-import com.agussnb.circuitmakerf1.model.Circuit
+import com.agussnb.circuitmakerf1.data.location.GPSManager
+import com.agussnb.circuitmakerf1.domain.model.Track
 import kotlinx.coroutines.launch
 import android.Manifest
+import com.agussnb.circuitmakerf1.domain.port.TrackRepository
+import com.agussnb.circuitmakerf1.ui.components.AddButton
 import kotlin.math.floor
 
 
 @Composable
-fun RecordingCircuitScreen(gpsManager: GPSManager, repository: CircuitRepository, onBack: () -> Unit) {
-    var nombreCircuito by remember { mutableStateOf("") }
-    var paisCircuito by remember { mutableStateOf("") }
-    var avisoPermiso by remember { mutableStateOf(false) }   // 🆕 estado del aviso
+fun RecordingCircuitScreen(gpsManager: GPSManager, repository: TrackRepository, onBack: () -> Unit) {
+    var circuitName by remember { mutableStateOf("") }
+    var circuitCountry by remember { mutableStateOf("") }
+    var permitWarn by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
-    val kilometros = gpsManager.distanciaTotal / 1000
-    val textoDistancia = "%.2f".format(kilometros)
-    val vueltas = if (kilometros > 0) floor(305.0 / kilometros).toInt() + 1 else 0
+    val kilometers : Double = gpsManager.totalDistance / 1000
+    val distanceText = "%.2f".format(kilometers)
+    val laps = if (kilometers > 0) floor(305.0 / kilometers).toInt() + 1 else 0
     val scrollState = rememberScrollState()
     val context = LocalContext.current
 
@@ -45,11 +46,11 @@ fun RecordingCircuitScreen(gpsManager: GPSManager, repository: CircuitRepository
     ) { permissions ->
         val fineConcedido = permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true
         if (fineConcedido) {
-            avisoPermiso = false
+            permitWarn = false
             gpsManager.startLocationUpdates()
             gpsManager.startRecording()
         } else {
-            avisoPermiso = true
+            permitWarn = true
         }
     }
 
@@ -83,29 +84,29 @@ fun RecordingCircuitScreen(gpsManager: GPSManager, repository: CircuitRepository
                 .fillMaxWidth(),
             label = if (gpsManager.isRecording) "Detener grabación" else "Iniciar grabación"
         )
-        if (avisoPermiso) {
+        if (permitWarn) {
             Text(
                 "Necesitás habilitar la ubicación precisa para grabar un circuito",
                 modifier = Modifier.padding(top = 8.dp)
             )
         }
 
-        Text("Distancia recorrida: $textoDistancia km")
+        Text("Distancia recorrida: $distanceText km")
 
-        if (!gpsManager.isRecording && kilometros > 0.005) {
+        if (!gpsManager.isRecording && kilometers > 0.005) {
             Text("¡Circuito completado!", modifier = Modifier.padding(top = 16.dp))
 
             TextField(
-                value = nombreCircuito,
-                onValueChange = { nombreCircuito = it },
+                value = circuitName,
+                onValueChange = { circuitName = it },
                 label = { Text("Dale un nombre a tu circuito") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp)
             )
             TextField(
-                value = paisCircuito,
-                onValueChange = { paisCircuito = it },
+                value = circuitCountry,
+                onValueChange = { circuitCountry = it },
                 label = { Text("Pais de tu circuito") },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -115,22 +116,22 @@ fun RecordingCircuitScreen(gpsManager: GPSManager, repository: CircuitRepository
             AddButton(
                 onClick = {
                     scope.launch {
-                        repository.insertsCircuit(
-                            Circuit(
-                                name = nombreCircuito,
-                                country = paisCircuito,
-                                lengthKm = kilometros,
-                                laps = vueltas
+                        repository.insertsTrack(
+                            Track(
+                                name = circuitName,
+                                country = circuitCountry,
+                                lengthKm = kilometers,
+                                laps = laps
                             )
                         )
-                        gpsManager.distanciaTotal = 0.0
-                        nombreCircuito = ""
-                        paisCircuito = ""
+                        gpsManager.totalDistance = 0.0
+                        circuitName = ""
+                        circuitCountry = ""
                     }
                 },
                 label = "Guardar en Base de Datos",
                 modifier = Modifier.fillMaxWidth(),
-                enabled = nombreCircuito.isNotBlank()
+                enabled = circuitName.isNotBlank()
             )
         }
     }

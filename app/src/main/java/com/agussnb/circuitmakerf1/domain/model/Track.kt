@@ -1,10 +1,10 @@
-package com.agussnb.circuitmakerf1.model
+package com.agussnb.circuitmakerf1.domain.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class Circuit (
+data class Track (
     @PrimaryKey(autoGenerate = true)
     val id : Int = 0,
     val name : String,

@@ -1,4 +1,4 @@
-package com.agussnb.circuitmakerf1.ui
+package com.agussnb.circuitmakerf1.ui.components
 
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
