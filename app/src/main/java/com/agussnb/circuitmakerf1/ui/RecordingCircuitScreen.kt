@@ -1,4 +1,4 @@
-package com.example.circuitmakerf1.ui
+package com.agussnb.circuitmakerf1.ui
 
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -20,9 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import com.example.circuitmakerf1.data.CircuitRepository
-import com.example.circuitmakerf1.gps.GPSManager
-import com.example.circuitmakerf1.model.Circuit
+import com.agussnb.circuitmakerf1.data.CircuitRepository
+import com.agussnb.circuitmakerf1.gps.GPSManager
+import com.agussnb.circuitmakerf1.model.Circuit
 import kotlinx.coroutines.launch
 import android.Manifest
 import kotlin.math.floor

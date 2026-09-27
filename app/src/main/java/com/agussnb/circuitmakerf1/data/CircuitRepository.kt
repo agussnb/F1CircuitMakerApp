@@ -1,6 +1,6 @@
-package com.example.circuitmakerf1.data
-import com.example.circuitmakerf1.dao.CircuitDao
-import com.example.circuitmakerf1.model.Circuit
+package com.agussnb.circuitmakerf1.data
+import com.agussnb.circuitmakerf1.dao.CircuitDao
+import com.agussnb.circuitmakerf1.model.Circuit
 import kotlinx.coroutines.flow.Flow
 
 class CircuitRepository(private val circuitDao : CircuitDao) {

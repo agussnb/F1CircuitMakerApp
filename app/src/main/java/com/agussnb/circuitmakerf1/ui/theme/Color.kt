@@ -1,4 +1,4 @@
-package com.example.circuitmakerf1.ui.theme
+package com.agussnb.circuitmakerf1.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,4 +1,4 @@
-package com.example.circuitmakerf1
+package com.agussnb.circuitmakerf1
 
 import org.junit.Test
 

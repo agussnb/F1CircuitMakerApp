@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.circuitmakerf1"
+    namespace = "com.agussnb.circuitmakerf1"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.circuitmakerf1"
+        applicationId = "com.agussnb.circuitmakerf1"
         minSdk = 28
         targetSdk = 36
         versionCode = 1

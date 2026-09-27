@@ -1,4 +1,4 @@
-package com.example.circuitmakerf1.model
+package com.agussnb.circuitmakerf1.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

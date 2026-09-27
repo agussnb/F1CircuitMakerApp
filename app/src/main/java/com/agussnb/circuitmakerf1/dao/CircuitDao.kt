@@ -1,11 +1,11 @@
-package com.example.circuitmakerf1.dao
+package com.agussnb.circuitmakerf1.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.circuitmakerf1.model.Circuit
+import com.agussnb.circuitmakerf1.model.Circuit
 import kotlinx.coroutines.flow.Flow
 
 @Dao

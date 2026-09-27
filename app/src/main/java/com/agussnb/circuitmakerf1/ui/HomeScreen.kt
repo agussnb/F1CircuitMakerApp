@@ -1,4 +1,4 @@
-package com.example.circuitmakerf1.ui
+package com.agussnb.circuitmakerf1.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -12,13 +12,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.circuitmakerf1.data.CircuitRepository
-import com.example.circuitmakerf1.model.Circuit
+import com.agussnb.circuitmakerf1.data.CircuitRepository
+import com.agussnb.circuitmakerf1.model.Circuit
 import androidx.compose.runtime.getValue
-import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(repository : CircuitRepository, onCircuitClick : (Int)-> Unit, onRecordClick : () -> Unit){
