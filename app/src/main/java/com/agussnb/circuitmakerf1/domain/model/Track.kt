@@ -3,14 +3,12 @@ package com.agussnb.circuitmakerf1.domain.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
-data class Track (
-    @PrimaryKey(autoGenerate = true)
-    val id : Int = 0,
-    val name : String,
-    val country : String,
-    val lengthKm : Double,
-    val laps : Int
+data class Track(
+    val id: Int = 0,
+    val name: String,
+    val country: String,
+    val lengthKm: Double,
+    val laps: Int
 ) {
     override fun toString(): String {
         return buildString {

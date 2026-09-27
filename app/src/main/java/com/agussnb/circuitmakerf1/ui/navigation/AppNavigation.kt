@@ -26,7 +26,7 @@ fun AppNavigation(repository: TrackRepository, gpsManager: GPSManager){
     NavHost(navController = controller, startDestination = home){
         composable(home){
             HomeScreen(repository = repository,
-                onCircuitClick = {name -> controller.navigate("details/$name")},
+                onTrackClick = {name -> controller.navigate("details/$name")},
                 onRecordClick = {controller.navigate(record)})
         }
         composable(

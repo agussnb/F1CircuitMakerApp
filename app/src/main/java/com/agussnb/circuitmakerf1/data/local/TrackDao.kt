@@ -11,14 +11,14 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface TrackDao {
     @Query("SELECT * FROM track")
-    fun getAll(): Flow<List<Track>>
+    fun getAll(): Flow<List<TrackEntity>>
 
-    @Query(value = "SELECT * FROM track WHERE id = :id")
-    suspend fun getById(id: Int): Track?
+    @Query("SELECT * FROM track WHERE id = :id")
+    suspend fun getById(id: Int): TrackEntity?
 
-    @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
-    suspend fun insert(track: Track)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(track: TrackEntity)
 
-    @Delete()
-    suspend fun delete(track: Track)
+    @Delete
+    suspend fun delete(track: TrackEntity)
 }
