@@ -10,5 +10,7 @@ data class TrackEntity(
     val name: String,
     val country: String,
     val lengthKm: Double,
-    val laps: Int
+    val laps: Int,
+    /** Nombre del enum `SportType` ("CYCLING", "RUNNING"). */
+    val sportType: String
 )

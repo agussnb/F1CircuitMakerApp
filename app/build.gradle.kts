@@ -45,6 +45,12 @@ android {
     }
 }
 
+// Room exporta el esquema de cada versión de la base a /app/schemas (se sube a Git).
+// Sirve para escribir y verificar las migraciones.
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

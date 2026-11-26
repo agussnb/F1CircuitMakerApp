@@ -2,9 +2,17 @@ package com.agussnb.circuitmakerf1.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.agussnb.circuitmakerf1.domain.model.Track
 
-@Database(entities = [TrackEntity::class], version = 1)
+@Database(
+    entities = [
+        TrackEntity::class,
+        TrackPointEntity::class,
+        SessionEntity::class,
+        LapEntity::class
+    ],
+    version = 2
+)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun trackDao(): TrackDao
+    abstract fun sessionDao(): SessionDao
 }
