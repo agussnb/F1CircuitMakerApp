@@ -200,6 +200,43 @@
 
 ---
 
+## 🗺️ Google Maps: registrar la huella SHA-1 en Google Cloud
+
+Si el mapa aparece **gris o vacío** (solo con el logo de Google), la API key no está reconociendo la app.
+La key está restringida por **nombre de paquete + huella SHA-1 del certificado con el que se firma el APK**.
+Cada certificado tiene su propia huella:
+
+| Certificado | Cuándo se usa | ¿Hay que registrarlo? |
+|---|---|---|
+| Debug (`~/.android/debug.keystore`, uno por PC) | Run desde Android Studio y APK de debug | Sí, el de cada PC donde compiles |
+| Release (tu keystore propio) | APK/AAB firmado para distribuir | Sí, cuando lo crees |
+| Play App Signing | Si se publica en Play Store | Sí, el que muestra Play Console |
+
+La huella es del certificado, no del teléfono: un APK de debug firmado en tu PC funciona en cualquier celular.
+
+### Pasos
+
+- [ ] **1. Obtener la huella SHA-1.** En la terminal de Android Studio (Windows):
+  ```
+  keytool -list -v -keystore "%USERPROFILE%\.android\debug.keystore" -alias androiddebugkey -storepass android -keypass android
+  ```
+  Copiar la línea `SHA1: XX:XX:...`. (Alternativa: panel Gradle → `app` → `Tasks` → `android` → `signingReport`, variante `debug`.)
+  Para el keystore de release, el mismo comando con la ruta, el alias y las contraseñas de ese keystore.
+- [ ] **2.** Entrar a [Google Cloud Console](https://console.cloud.google.com/) y elegir el proyecto de la app.
+- [ ] **3.** Menú → **APIs y servicios** → **Credenciales** → hacer clic en la API key que está en `secrets.properties`.
+- [ ] **4.** En **Restricciones de aplicaciones** elegir **Apps para Android** → **Agregar** →
+  nombre del paquete `com.agussnb.circuitmakerf1` + la huella SHA-1 → **Listo**.
+  (Se pueden agregar varias filas: debug, release, etc.)
+- [ ] **5.** En **Restricciones de API** elegir **Restringir clave** y dejar solo **Maps SDK for Android**.
+- [ ] **6.** **Guardar.** El cambio puede tardar unos 5 minutos en aplicarse. No hace falta recompilar: cerrar y volver a abrir la app.
+- [ ] **7. Si sigue gris:** en Logcat filtrar por `Google Maps Android API`. El error `Authorization failure` muestra
+  el paquete y la SHA-1 que la key esperaba recibir: compararlos con los registrados.
+
+⚠️ La facturación de Google Cloud está en prueba gratuita hasta el **27/12/2026**: antes de esa fecha hay que pasarla
+a cuenta completa (botón "Actualizar") o el mapa deja de cargar. El Maps SDK para Android no tiene costo.
+
+---
+
 ## 🧪 Cómo probar la demo
 
 **Sin moverte (emulador o teléfono):**
