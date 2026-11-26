@@ -1,56 +1,41 @@
 package com.agussnb.circuitmakerf1.ui.theme
 
-import android.os.Build
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Color
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
-)
-
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
+/**
+ * Tema oscuro fijo, estilo pantalla de cronometraje de la F1. No usamos los colores
+ * dinámicos de Android 12+ para que la app se vea igual en todos los teléfonos.
+ */
+private val F1ColorScheme = darkColorScheme(
+    primary = F1Red,
     onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    primaryContainer = F1RedDark,
+    onPrimaryContainer = Color.White,
+    secondary = Asphalt,
+    onSecondary = Carbon,
+    tertiary = TimingPurple,
+    background = Carbon,
+    onBackground = OffWhite,
+    surface = Carbon,
+    onSurface = OffWhite,
+    surfaceVariant = CarbonSurfaceHigh,
+    onSurfaceVariant = Asphalt,
+    surfaceContainer = CarbonSurface,
+    surfaceContainerHigh = CarbonSurfaceHigh,
+    surfaceContainerHighest = CarbonSurfaceHigh,
+    surfaceContainerLow = CarbonSurface,
+    outline = Asphalt
 )
 
 @Composable
 fun CircuitMakerF1Theme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
-
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = F1ColorScheme,
         typography = Typography,
         content = content
     )

@@ -1,4 +1,4 @@
-package com.agussnb.circuitmakerf1.ui.home
+package com.agussnb.circuitmakerf1.ui.tracklist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -13,26 +13,26 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
-data class HomeUiState(
+data class TrackListUiState(
     val tracks: List<Track> = emptyList(),
     val isLoading: Boolean = true
 )
 
-class HomeViewModel(repository: TrackRepository) : ViewModel() {
+class TrackListViewModel(repository: TrackRepository) : ViewModel() {
 
-    val uiState: StateFlow<HomeUiState> = repository.allTracks
-        .map { tracks -> HomeUiState(tracks = tracks, isLoading = false) }
+    val uiState: StateFlow<TrackListUiState> = repository.allTracks
+        .map { tracks -> TrackListUiState(tracks = tracks, isLoading = false) }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = HomeUiState()
+            initialValue = TrackListUiState()
         )
 
     companion object {
         val Factory = viewModelFactory {
             initializer {
                 val app = this[APPLICATION_KEY] as TrackMakerApp
-                HomeViewModel(app.container.trackRepository)
+                TrackListViewModel(app.container.trackRepository)
             }
         }
     }
