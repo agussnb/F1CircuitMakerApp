@@ -11,9 +11,15 @@
 - [x] Fase 2 — Estado y recomposición
 - [x] Fase 3 — Navegación básica
 - [x] Fase 4 — Persistencia con Room
-- [ ] GPS: permisos y distancia (funciona a medias, ver Fase 0)
+- [x] Fase 0 — Git y limpieza
+- [x] Fase 5 — Arquitectura (hexagonal liviana)
+- [x] Fase 6 — GPS confiable (falta probar en la calle con la pantalla apagada)
+- [x] Fase 7 — Crear circuito
+- [x] Fase 8 — Modo vuelta rápida
+- [ ] Fase 9 — UX real (hecha en buena parte)
+- [ ] Fase 10 — Estadísticas y opciones (hecha en parte)
 
-#### Estás en etapa: transición de demo a app real.
+#### Estás en etapa: **demo v0.1 lista para testear** (ver "Cómo probar la demo" al final).
 
 ---
 
@@ -23,197 +29,186 @@
 
 #### TODO 1 — Git
 
-- [ ] Subir el proyecto a GitHub
-- [ ] Revisar que `.gitignore` excluya `build/`, `.gradle/` y `local.properties`
-- [ ] Agregar este roadmap en la raíz del repo
-- [ ] Definir convención de commits (`feat:`, `fix:`, `refactor:`, `docs:`)
+- [x] Subir el proyecto a GitHub
+- [x] Revisar que `.gitignore` excluya `build/`, `.gradle/` y `local.properties`
+- [x] Agregar este roadmap en la raíz del repo
+- [x] Definir convención de commits (`feat:`, `fix:`, `refactor:`, `docs:`)
 
 #### TODO 2 — Bugs actuales
 
-- [ ] Arreglar la lógica invertida de permisos en `RecordingCircuitScreen`
-- [ ] Exigir `ACCESS_FINE_LOCATION` (la ubicación aproximada no sirve para circuitos)
-- [ ] Corregir la fórmula de vueltas: `floor(305 / km) + 1`
-- [ ] Sacar la inserción de Monza en `MainActivity` (se duplica en cada arranque)
-- [ ] Sacar el botón que agrega Spa hardcodeado
-- [ ] Navegar al detalle por `id` en vez de por `name`
-- [ ] Validar que el nombre no esté vacío antes de guardar
+- [x] Arreglar la lógica invertida de permisos en `RecordingCircuitScreen`
+- [x] Exigir `ACCESS_FINE_LOCATION` (la ubicación aproximada no sirve para circuitos)
+- [x] Corregir la fórmula de vueltas: `floor(305 / km) + 1`
+- [x] Sacar la inserción de Monza en `MainActivity` (se duplica en cada arranque)
+- [x] Sacar el botón que agrega Spa hardcodeado
+- [x] Navegar al detalle por `id` en vez de por `name`
+- [x] Validar que el nombre no esté vacío antes de guardar
 
 #### TODO 3 — Identidad
 
-- [ ] Cambiar el package `com.example` por uno propio (Play Store rechaza `com.example`)
-
-👉 Cada ítem es un commit chico. Buen momento para agarrarle la mano al flujo de Git.
+- [x] Cambiar el package `com.example` por uno propio (Play Store rechaza `com.example`)
 
 ---
 
 ## 🏗️ FASE 5 — Arquitectura (hexagonal liviana)
 
-### Objetivo: dejar la base lista para la lógica compleja que viene.
-
 #### TODO 4 — Estructura
 
-- [ ] Crear paquetes `domain`, `data`, `ui`, `di`
-- [ ] Crear `CircuitMakerApp : Application` y un `AppContainer` (inyección manual)
-- [ ] Mover la creación de la base de datos al `AppContainer` (una sola instancia)
+- [x] Crear paquetes `domain`, `data`, `ui`, `di`
+- [x] Crear `TrackMakerApp : Application` y un `AppContainer` (inyección manual)
+- [x] Mover la creación de la base de datos al `AppContainer` (una sola instancia)
 
 #### TODO 5 — Dominio, puertos y adaptadores
 
-- [ ] Modelo de dominio `Circuit` en Kotlin puro (sin anotaciones de Room)
-- [ ] `CircuitEntity` en `data` + mappers `toDomain()` / `toEntity()`
-- [ ] Interfaz `CircuitRepository` en `domain` (puerto)
-- [ ] `RoomCircuitRepository` en `data` (adaptador)
-- [ ] Interfaz `LocationProvider` que exponga un `Flow<GpsPoint>`
-- [ ] `FusedLocationProvider` como implementación real (reemplaza a `GPSManager`)
+- [x] Modelo de dominio `Track` en Kotlin puro (sin anotaciones de Room)
+- [x] `TrackEntity` en `data` + mappers `toDomain()` / `toEntity()`
+- [x] Interfaz `TrackRepository` en `domain` (puerto)
+- [x] `RoomTrackRepository` en `data` (adaptador)
+- [x] Interfaz `LocationProvider` que exponga un `Flow<GpsPoint>`
+- [x] `FusedLocationProvider` como implementación real (reemplaza a `GPSManager`, ya borrado)
 
 #### TODO 6 — ViewModels
 
-- [ ] `HomeViewModel`, `DetailViewModel`, `RecordingViewModel`
-- [ ] Exponer el estado de cada pantalla con `StateFlow<UiState>`
-- [ ] Mover el formateo de `Circuit.toString()` a la UI
-- [ ] Sacar `rememberCoroutineScope` de `AppNavigation` (el borrado va al ViewModel)
+- [x] `HomeViewModel` (hoy `TrackListViewModel`), `DetailViewModel`, `RecordingViewModel`
+- [x] Exponer el estado de cada pantalla con `StateFlow<UiState>`
+- [x] Mover el formateo de `Track` a la UI
+- [x] Sacar `rememberCoroutineScope` de `AppNavigation` (el borrado va al ViewModel)
 
 #### TODO 7 — Tests
 
-- [ ] Primer test unitario de dominio (por ejemplo, la calculadora de vueltas FIA)
-
-👉 Ahora la UI solo dibuja y la lógica se puede testear sin celular.
+- [x] Primer test unitario de dominio (calculadora de vueltas FIA)
 
 ---
 
 ## 📍 FASE 6 — GPS confiable
 
-### Objetivo: grabar un recorrido real, con la pantalla apagada, sin perder datos.
+#### TODO 8 — Mapa y datos en pantalla
 
-#### TODO 8 — Datos en pantalla
-
-- [ ] Mostrar latitud, longitud y precisión en vivo
-- [ ] Descartar puntos con `accuracy` mayor a 20 m
-- [ ] Ignorar movimientos menores a 2–3 m (evita sumar distancia estando quieto)
+- [x] Google Maps Compose con el trazado en vivo
+- [x] Mostrar la precisión del GPS en vivo (con color según la calidad)
+- [x] Descartar puntos con `accuracy` mayor a 20 m (`TrackRecorder.withPoint`, con tests)
+- [x] Ignorar movimientos menores a 3 m (evita sumar distancia estando quieto)
 
 #### TODO 9 — Foreground Service
 
-- [ ] Crear `RecordingService` con notificación persistente
-- [ ] Declarar `foregroundServiceType="location"` en el Manifest (Android 14+)
-- [ ] Pedir permiso `POST_NOTIFICATIONS` (Android 13+)
-- [ ] Verificar que la grabación sobrevive a rotar, minimizar y apagar la pantalla
+- [x] Crear `RecordingService` con notificación persistente
+- [x] Declarar `foregroundServiceType="location"` en el Manifest (Android 14+)
+- [x] Pedir permiso `POST_NOTIFICATIONS` (Android 13+)
+- [ ] Verificar en un teléfono que la grabación sobrevive a rotar, minimizar y apagar la pantalla
 
 #### TODO 10 — Persistir la trayectoria
 
-- [ ] Entidad `TrackPointEntity(circuitId, order, lat, lng, timestamp)`
-- [ ] Guardar los puntos junto con el circuito en una transacción
-- [ ] Agregar campo `sportType` a `Circuit` (ciclismo por defecto)
-- [ ] Migración de Room a versión 2 (o `fallbackToDestructiveMigration` mientras desarrollás)
+- [x] Entidad `TrackPointEntity(trackId, position, lat, lng)` con clave foránea a `track`
+- [x] Guardar los puntos junto con el circuito en una transacción (`withTransaction`)
+- [x] Campo `sportType` en `Track` (ciclismo por defecto)
+- [x] Migración de Room a versión 2 (`MIGRATION_1_2`, esquema exportado en `app/schemas`)
+- [ ] Test instrumentado de la migración con `MigrationTestHelper`
 
 #### TODO 11 — GPS simulado
 
-- [ ] `FakeLocationProvider` que reproduzca una ruta predefinida
-- [ ] Poder "pedalear" desde el escritorio para probar
-
-👉 Te ahorra salir a dar vueltas en bici cada vez que querés probar algo.
+- [x] `SimulatedLocationProvider`: opción "GPS simulado" en Opciones
+- [x] Al grabar: recorre un circuito de demo; en vuelta rápida: da vueltas sobre el circuito elegido
+- [x] `FakeLocationProvider` para los tests del dominio
 
 ---
 
 ## 🗺️ FASE 7 — Crear circuito
 
-### Objetivo: el flujo completo Grabar → Cerrar → Circuito armado.
-
 #### TODO 12 — Menú principal
 
-- [ ] Pantalla menú: Mis circuitos / Crear circuito / Opciones
-- [ ] Pantalla Opciones (vacía por ahora)
+- [x] Pantalla menú: Mis circuitos / Crear circuito / Opciones
+- [x] Pantalla Opciones (GPS simulado, distancia de carrera, deporte)
 
 #### TODO 13 — Mapa
 
-- [ ] Integrar Google Maps Compose (API key en `local.properties`, fuera de Git)
-- [ ] Dibujar el trazado en vivo mientras grabás
-- [ ] Mostrar el circuito en la pantalla de detalle
+- [x] Dibujar el trazado en vivo mientras grabás
+- [x] Mostrar el circuito en la pantalla de detalle (con sectores y meta)
 
 #### TODO 14 — Cierre y limpieza del trazado
 
-- [ ] Detectar el cierre: volver a menos de 15–20 m del inicio tras recorrer una distancia mínima
-- [ ] Avisar "Circuito cerrado" y ofrecer terminar la grabación
-- [ ] Simplificar la línea con Douglas-Peucker
+- [x] Detectar el cierre: volver a menos de 25 m del inicio tras recorrer 200 m y alejarse 50 m
+- [x] Avisar "Circuito cerrado" y ofrecer terminar la grabación
+- [x] Simplificar la línea con Douglas-Peucker (`simplifyPath`, tolerancia 2 m)
 
 #### TODO 15 — Cálculos
 
-- [ ] `SectorCalculator`: dividir el circuito en 3 sectores por distancia
-- [ ] Guardar la línea de meta y los límites de sector (punto + dirección)
-- [ ] `FiaLapCalculator`: `floor(305 / km) + 1`
-- [ ] Tests unitarios de ambos
-
-👉 Acá tu app ya hace la primera mitad de lo que imaginaste.
+- [x] `buildTrackLayout`: dividir el circuito en 3 sectores por distancia
+- [x] Línea de meta y límites de sector como punto + dirección (se recalculan desde el trazado)
+- [x] `fiaLapCount`: `floor(305 / km) + 1`
+- [x] Tests unitarios
 
 ---
 
 ## ⏱️ FASE 8 — Modo vuelta rápida
 
-### Objetivo: el corazón de la app.
-
 #### TODO 16 — Modelos
 
-- [ ] `Session`, `Lap`, `SectorTime` (dominio + entidades Room)
+- [x] `Lap`, `TimingColor` (dominio) + `SessionEntity`, `LapEntity` (Room)
 
 #### TODO 17 — Detección de cruces
 
-- [ ] Detectar el cruce de meta con intersección de segmentos
-- [ ] Detectar el cruce de cada límite de sector
-- [ ] Interpolar el tiempo exacto del cruce entre dos lecturas GPS
-- [ ] Tests con `FakeLocationProvider`
+- [x] Detectar el cruce de meta (solo en sentido de carrera, dentro del ancho de la línea)
+- [x] Detectar el cruce de cada límite de sector
+- [x] Interpolar el tiempo exacto del cruce entre dos lecturas GPS
+- [x] Tests con recorridos simulados (`LapTimingEngineTest`)
 
 #### TODO 18 — Cronómetro
 
-- [ ] Pantalla de sesión: tiempo de vuelta en vivo y sector actual
-- [ ] Mostrar el tiempo de cada sector al cruzarlo
-- [ ] Colores: 🟣 mejor histórico, 🟢 mejor de la sesión, 🟡 más lento
-- [ ] Lista de vueltas de la sesión
-- [ ] Delta contra tu mejor vuelta
-
-👉 Ahora sí: F1 en bici.
+- [x] Pantalla de sesión: tiempo de vuelta en vivo y sector actual
+- [x] Mostrar el tiempo de cada sector al cruzarlo
+- [x] Colores: 🟣 mejor histórico, 🟢 mejor de la sesión, 🟡 más lento
+- [x] Lista de vueltas de la sesión
+- [x] Delta contra tu mejor vuelta
 
 ---
 
 ## 🎨 FASE 9 — UX real
 
-- [ ] LazyColumn en vez de Column
-- [ ] Cards para cada circuito
-- [ ] TopAppBar
-- [ ] FloatingActionButton para crear circuito
-- [ ] Estados vacíos ("Todavía no creaste circuitos")
-- [ ] Loading states
-- [ ] Diálogo de confirmación antes de borrar
-- [ ] Tema visual estilo F1 (oscuro, tipografía, colores de sectores)
+- [x] LazyColumn en vez de Column (lista de circuitos y de vueltas)
+- [x] Cards para cada circuito
+- [x] TopAppBar
+- [x] FloatingActionButton para crear circuito
+- [x] Estados vacíos ("Todavía no creaste circuitos")
+- [x] Loading states
+- [x] Diálogo de confirmación antes de borrar
+- [x] Tema visual estilo F1 (oscuro, colores de sectores y de cronometraje)
+- [ ] Textos a `strings.xml`
+- [ ] Grabación con mapa a pantalla completa y controles encima
+- [ ] Aviso en el menú si hay una grabación o sesión en curso
 
 ---
 
 ## 📊 FASE 10 — Estadísticas y opciones
 
 - [ ] Historial de sesiones por circuito
-- [ ] Mejor vuelta y mejores sectores
-- [ ] Vuelta ideal (suma de tus mejores sectores)
-- [ ] Opción: distancia objetivo para calcular vueltas (además de los 305 km FIA)
-- [ ] Opción: deporte (ciclismo / atletismo)
+- [x] Mejor vuelta y mejores sectores
+- [x] Vuelta ideal (suma de tus mejores sectores)
+- [x] Opción: distancia objetivo para calcular vueltas (además de los 305 km FIA)
+- [x] Opción: deporte (ciclismo / atletismo)
 - [ ] Exportar circuito en GPX
-
----
-
-## 🏁 FASE FINAL — App funcional
-
-Tu app debería poder:
-
-- Crear un circuito grabándolo con GPS
-- Mostrarlo en un mapa con sus 3 sectores
-- Calcular las vueltas estilo FIA
-- Cronometrar vueltas y sectores con colores F1
-- Guardar sesiones y mostrar estadísticas
-- Persistir todo localmente
 
 ---
 
 ## 🔮 FUTURO
 
-- [ ] Soporte para atletismo
+- [ ] Soporte real para atletismo (velocidades y filtros propios)
 - [ ] Mover sectores a mano
 - [ ] Compartir circuitos
 - [ ] Hilt para inyección de dependencias
 - [ ] GitHub Actions: build y tests en cada push
 - [ ] Publicar en Play Store
+
+---
+
+## 🧪 Cómo probar la demo
+
+**Sin moverte (emulador o teléfono):**
+1. Opciones → activar **GPS simulado**.
+2. Crear circuito → Iniciar grabación → esperar ~2 minutos a que dé la vuelta → aparece "¡Circuito cerrado!" → Terminar → nombre → Guardar.
+3. En el detalle: mapa con los 3 sectores → **Modo vuelta rápida** → Iniciar sesión.
+4. Cada vuelta tarda ~1:50. Los sectores se pintan 🟣/🟢/🟡 y la vuelta queda guardada.
+
+**En la calle:**
+1. Opciones → GPS simulado **desactivado**.
+2. Pararte donde querés la largada → Iniciar grabación → dar la vuelta → al volver al inicio, Terminar.
+3. Modo vuelta rápida: arrancar un poco antes de la meta y cruzarla en el mismo sentido en que grabaste.
