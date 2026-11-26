@@ -53,9 +53,14 @@ class FusedLocationProvider(context: Context) : LocationProvider {
     }
 }
 
+/**
+ * Usamos `elapsedRealtimeNanos` (reloj monotónico desde que prendió el teléfono) en vez de
+ * `time` (hora UTC): es el mismo reloj que `SystemClock.elapsedRealtime()`, así la pantalla
+ * puede mostrar el cronómetro en vivo comparando contra la hora de la última lectura.
+ */
 private fun Location.toGpsPoint(): GpsPoint = GpsPoint(
     latitude = latitude,
     longitude = longitude,
     accuracyMeters = accuracy,
-    timestampMillis = time
+    timestampMillis = elapsedRealtimeNanos / 1_000_000
 )
