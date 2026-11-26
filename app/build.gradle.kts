@@ -60,6 +60,8 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    // material3 1.4+ ya no incluye los íconos (Icons.Filled.*): se agregan aparte, versión dada por el BOM
+    implementation(libs.androidx.compose.material.icons.core)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.maps.compose)
     // Navegación
